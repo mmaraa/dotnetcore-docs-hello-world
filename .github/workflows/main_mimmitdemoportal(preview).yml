@@ -40,22 +40,13 @@ jobs:
     environment:
       name: 'Preview'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
-
+    
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: ASP-app
       
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2F2B3126170841DCBDF145DD79CF479D }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_1F5854CDD0EF4D8F9C888E3B15F18EF4 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CDF143CA707A44C8953BEF1B67A89E67 }}
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
@@ -63,4 +54,4 @@ jobs:
           app-name: 'mimmitdemoPortal'
           slot-name: 'Preview'
           package: .
-          
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A7681D42A6EA468B91D4CCA824745A10 }}
